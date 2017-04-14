@@ -1,0 +1,11 @@
+You need:
+- python3
+- pyyaml (pip3 install pyyaml)
+- The roms of the games whose data you want to dump
+
+just place the ROM in the corresponding directory and name it game.<original suffix>
+
+Supported games:
+- Pokémon Blue (U)
+- Pokémon Red (U)
+

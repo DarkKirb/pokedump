@@ -118,3 +118,30 @@ for i in range(0 if includeGlitch else 1, 256 if includeGlitch else 190):
 print("Writing pokédex entries")
 with open("pokedex_ent.yaml", "w") as f1:
     f1.write(yaml.dump(entries,default_flow_style=False))
+def get_encounters(id):
+    f.seek(0xCEEB+id*2)
+    off=int.from_bytes(f.read(2),'little')
+    f.seek(0x8000+off)
+    def get_rate():
+        rate=struct.unpack("<B",f.read(1))[0]
+        if rate == 0:
+            encounters=[]
+        else:
+            encounters=[]
+            for i in range(10):
+                level,pokemon = struct.unpack("<BB",f.read(2))
+                encounters.append({"level":level,"pokemon":pokemon})
+        return rate, encounters
+    grassRate, grassEncounters = get_rate()
+    waterRate, waterEncounters = get_rate()
+    return [{"rate":grassRate,"encounters":grassEncounters},{"rate":waterRate,"encounters":waterEncounters}]
+
+#Maps
+encounters=[]
+for i in range(248):
+    encounters.append(get_encounters(i))
+
+print("writing encounters")
+with open("encounters.yaml","w") as f1:
+    f1.write(yaml.dump(encounters, default_flow_style=False))
+
