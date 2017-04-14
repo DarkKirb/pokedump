@@ -95,7 +95,7 @@ with open("typenames.yaml","w") as f1:
 
 def get_pokemon_name(id):
     f.seek(0x1C21E+id*10)
-    return get_text(100)
+    return get_text(10)
 names=[]
 for i in range(0 if includeGlitch else 1, 256 if includeGlitch else 190):
     names.append(get_pokemon_name(i))
