@@ -1,15 +1,16 @@
 #!/usr/bin/env python3
 import yaml
 import struct
+from config import *
 
 #Settings
 #Feel free to change them
 includeGlitch=False
 
 f = open("game.gb","rb")
-f.seek(0x41024)
+f.seek(id_to_pokedex)
 indexToDex=[]
-for i in range(0 if includeGlitch else 1, 256 if includeGlitch else 190):
+for i in range(0 if includeGlitch else 1, 256 if includeGlitch else no_pokemon):
     indexToDex.append(int.from_bytes(f.read(1), 'little'))
 print("Writing internal id -> pokédex number mapping")
 with open("index_to_dex.yaml","w") as f1:
@@ -18,13 +19,12 @@ with open("index_to_dex.yaml","w") as f1:
 basestats=[]
 def seek_to_stat(id):
     if id==151:
-        f.seek(0x425B)
+        f.seek(mew_stat)
     else:
         id-=1
         if id < 0:
             id = 255
-        f.seek(0x383DE+id*28)
-f.seek(0x383DE)
+        f.seek(other_stat+id*28)
 def do_stats(pkID):
     seek_to_stat(pkID)
     dex = struct.unpack("<B",f.read(1))[0]
@@ -76,9 +76,9 @@ def get_text(maxlen=None):
     return txt_to_str(_get_text(maxlen))
 
 def get_type_name(id):
-    f.seek(0x27DAE+id*2)
+    f.seek(type_nametbl+id*2)
     off = struct.unpack("<H",f.read(2))[0]
-    f.seek(0x20000+off)
+    f.seek(type_nametblbank+off)
     return get_text()
 
 types=[]
@@ -94,7 +94,7 @@ with open("typenames.yaml","w") as f1:
     f1.write(yaml.dump(typenames,default_flow_style=False))
 
 def get_pokemon_name(id):
-    f.seek(0x1C21E+id*10)
+    f.seek(pkmn_nametbl+id*10)
     return get_text(10)
 names=[]
 for i in range(0 if includeGlitch else 1, 256 if includeGlitch else 190):
@@ -104,9 +104,9 @@ with open("monnames.yaml","w") as f1:
     f1.write(yaml.dump(names,default_flow_style=False))
 
 def get_pokedex_entry(id):
-    f.seek(0x4047E+id*2)
+    f.seek(pkdex_tbl+id*2)
     off = int.from_bytes(f.read(2),'little')-0x4000
-    f.seek(0x40000+off)
+    f.seek(pkdex_tblbank+off)
     speciesType = get_text(100)
     feet, inch, pounds = struct.unpack("<BBH",f.read(4))
     pokedexText = get_text(1000)
@@ -119,9 +119,9 @@ print("Writing pokédex entries")
 with open("pokedex_ent.yaml", "w") as f1:
     f1.write(yaml.dump(entries,default_flow_style=False))
 def get_encounters(id):
-    f.seek(0xCEEB+id*2)
+    f.seek(encounters_tbl+id*2)
     off=int.from_bytes(f.read(2),'little')
-    f.seek(0x8000+off)
+    f.seek(encounters_tblbank+off)
     def get_rate():
         rate=struct.unpack("<B",f.read(1))[0]
         if rate == 0:
@@ -147,9 +147,9 @@ with open("encounters.yaml","w") as f1:
 
 #Evos and moves
 def get_evos_and_moves(id):
-    f.seek(0x3B05C+id*2)
+    f.seek(evos_tbl+id*2)
     off = int.from_bytes(f.read(2),'little')-0x4000
-    f.seek(0x38000+off)
+    f.seek(evos_tblbank+off)
     def get_evos():
         evos=[]
         typ = f.read(1)
@@ -191,7 +191,7 @@ move_desc=None
 with open("effecttypes.yml") as f1:
     move_desc=yaml.load(f1.read())
 moves=[]
-f.seek(0x38000)
+f.seek(move_tbl)
 for i in range(165):
     animation, effect, power, typ, accuracy, pp = struct.unpack("<BBBBBB",f.read(6))
     moves.append({"animation":animation, "effect":move_desc[effect], "power":power,"type":typ,"accuracy":accuracy,"pp":pp})
@@ -199,4 +199,13 @@ for i in range(165):
 print("Writing move data")
 with open("moves.yaml","w") as f1:
     f1.write(yaml.dump(moves, default_flow_style=False))
+
+movenames=[]
+f.seek(move_nametbl)
+for i in range(165):
+    movenames.append(get_text())
+
+print("Writing move names")
+with open("movenames.yaml","w") as f1:
+    f1.write(yaml.dump(movenames, default_flow_style=False))
 
