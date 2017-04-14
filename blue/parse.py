@@ -145,3 +145,58 @@ print("writing encounters")
 with open("encounters.yaml","w") as f1:
     f1.write(yaml.dump(encounters, default_flow_style=False))
 
+#Evos and moves
+def get_evos_and_moves(id):
+    f.seek(0x3B05C+id*2)
+    off = int.from_bytes(f.read(2),'little')-0x4000
+    f.seek(0x38000+off)
+    def get_evos():
+        evos=[]
+        typ = f.read(1)
+        while typ != b'\x00':
+            if typ == b'\x01':
+                level, pokemon = struct.unpack("<BB",f.read(2))
+                evos.append({"type":"level", "level":level, "into":pokemon})
+            elif typ == b'\x02':
+                item, level, pokemon = struct.unpack("<BBB",f.read(3))
+                evos.append({"type":"item", "item":item, "level":level, "into":pokemon})
+            else:
+                level, pokemon = struct.unpack("<BB",f.read(2))
+                evos.append({"type":"trade", "level":level, "into":pokemon})
+            typ = f.read(1)
+        return evos
+    def get_moves():
+        moves=[]
+        while True:
+            level, move = struct.unpack("<BB",f.read(2))
+            if level == 0:
+                break
+            moves.append({"level":level, "move":move})
+        return moves
+    return {"evos":get_evos(), "moves":get_moves()}
+
+movesets=[]
+evos=[]
+for i in range(256 if includeGlitch else 190):
+    x=get_evos_and_moves(i)
+    movesets.append(x["moves"])
+    evos.append(x["evos"])
+print("Writing movesets and evos")
+with open("movesets.yaml","w") as f1:
+    f1.write(yaml.dump(movesets, default_flow_style=False))
+with open("evolutions.yaml","w") as f1:
+    f1.write(yaml.dump(evos, default_flow_style=False))
+
+move_desc=None
+with open("effecttypes.yml") as f1:
+    move_desc=yaml.load(f1.read())
+moves=[]
+f.seek(0x38000)
+for i in range(165):
+    animation, effect, power, typ, accuracy, pp = struct.unpack("<BBBBBB",f.read(6))
+    moves.append({"animation":animation, "effect":move_desc[effect], "power":power,"type":typ,"accuracy":accuracy,"pp":pp})
+
+print("Writing move data")
+with open("moves.yaml","w") as f1:
+    f1.write(yaml.dump(moves, default_flow_style=False))
+
