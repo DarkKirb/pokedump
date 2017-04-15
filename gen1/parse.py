@@ -1,14 +1,25 @@
 #!/usr/bin/env python3
 import yaml
 import struct
-with open("config.py", "r") as f:
-    exec(f.read())
+import sys,os
+fname = sys.argv[1]
+f = open(fname, "rb")
+f.seek(0x014E) #ROM CRC
+foldertbl = {
+    b'\x9d\x0a':"blue",
+    b'\x91\xe6':"red",
+    b'\xdd\xd5':"green-j",
+    b'\x3c\xa2':"blue-d",
+    b'\x5c\xdc':"red-d"
+             }
+os.chdir(foldertbl[f.read(2)])
+with open("config.py", "r") as f2:
+    exec(f2.read())
 
 #Settings
 #Feel free to change them
 includeGlitch=False
 
-f = open("game.gb","rb")
 f.seek(id_to_pokedex)
 indexToDex=[]
 for i in range(0 if includeGlitch else 1, 256 if includeGlitch else no_pokemon):
