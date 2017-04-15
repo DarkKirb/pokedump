@@ -14,3 +14,4 @@ evos_tbl=0x3B05C
 evos_tblbank=0x38000
 move_tbl=0x38000
 move_nametbl=0xB0000
+imperial=True

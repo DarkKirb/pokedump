@@ -112,9 +112,16 @@ def get_pokedex_entry(id):
     off = int.from_bytes(f.read(2),'little')-0x4000
     f.seek(pkdex_tblbank+off)
     speciesType = get_text(100)
-    feet, inch, pounds = struct.unpack("<BBH",f.read(4))
+    feet, inch, pounds, meters, kilograms = None, None, None, None, None
+    if imperial:
+        feet, inch, pounds = struct.unpack("<BBH",f.read(4))
+        pounds/=10
+    else:
+        meters, kilograms = struct.unpack("<BB",f.read(2))
+        meters/=10
+        kilograms/=10
     pokedexText = get_text(1000)
-    return {"speciesType":speciesType,"feet":feet,"inchs":inch,"pounds":pounds,"meters":None,"kilograms":None,"text":pokedexText}
+    return {"speciesType":speciesType,"feet":feet,"inchs":inch,"pounds":pounds,"meters":meters,"kilograms":kilograms,"text":pokedexText}
 
 entries=[]
 for i in range(0 if includeGlitch else 1, 256 if includeGlitch else 190):
