@@ -66,7 +66,13 @@ def do_stats(pkID):
     growth = struct.unpack("<B", f.read(1))[0]
     tmsnum = int.from_bytes(f.read(7), byteorder="little")
     f.read(1)
-    tms = [int(x) for x in bin(tmsnum)[2:]]
+    tms = []
+    i = 1
+    while tmsnum:
+        if tmsnum & 1:
+            tms.append(i)
+        tmsnum//=2
+        i+=1
     basestats.append({"dexno": dex,
                       "stats": stats,
                       "types": types,
