@@ -5,6 +5,7 @@ other_stat=0x383DE
 type_nametbl=0x27DAE
 type_nametblbank=0x20000
 pkmn_nametbl=0x1C21E
+monnames_len=10
 pkdex_tbl=0x4047E
 pkdex_tblbank=0x40000
 encounters_tbl=0xCEEB

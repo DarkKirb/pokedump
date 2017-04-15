@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 import yaml
 import struct
-from config import *
+with open("config.py", "r") as f:
+    exec(f.read())
 
 #Settings
 #Feel free to change them
@@ -40,6 +41,8 @@ def do_stats(pkID):
     basestats.append({"dexno":dex,"stats":stats,"types":types,"catchrate":catchrate,"baseexp":baseexp,"startmoves":startmoves,"tms":tms})
 
 for i in sorted(list(set(indexToDex))):
+    if (i == 0) and not includeGlitch:
+        continue
     do_stats(i)
 print("Writing pokémon base stats")
 with open("basestats.yaml","w") as f1:
@@ -94,10 +97,11 @@ with open("typenames.yaml","w") as f1:
     f1.write(yaml.dump(typenames,default_flow_style=False))
 
 def get_pokemon_name(id):
-    f.seek(pkmn_nametbl+id*10)
-    return get_text(10)
+    f.seek(pkmn_nametbl+id*monnames_len)
+    text=get_text(monnames_len)
+    return text
 names=[]
-for i in range(0 if includeGlitch else 1, 256 if includeGlitch else 190):
+for i in range(256 if includeGlitch else 190):
     names.append(get_pokemon_name(i))
 print("Writing pokémon names")
 with open("monnames.yaml","w") as f1:
