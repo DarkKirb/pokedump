@@ -14,7 +14,9 @@ foldertbl = {
     b'\x3c\xa2': "blue-d",
     b'\x5c\xdc': "red-d",
     b'V\xa4':    "blue-f",
-    b'z\xfc':    "red-f"
+    b'z\xfc':    "red-f",
+    b'^\x9c':    "blue-i",
+    b'\x89\xd2': "red-i"
 }
 os.chdir(foldertbl[f.read(2)])
 with open("config.py", "r") as f2:
