@@ -258,20 +258,21 @@ def get_evos_and_moves(id):
                 break
             moves.append({"level": level, "move": move})
         return moves
-    return {"evos": get_evos(), "moves": get_moves()}
+    evos=get_evos()
+    return {"evos": evos, "moves": get_moves()}
 
 
 movesets = []
-evos = []
+evols = []
 for i in range(256 if includeGlitch else 190):
     x = get_evos_and_moves(i)
     movesets.append(x["moves"])
-    evos.append(x["evos"])
+    evols.append(x["evos"])
 print("Writing movesets and evos")
 with open("movesets.yaml", "w") as f1:
     f1.write(yaml.dump(movesets, default_flow_style=False, allow_unicode=True))
 with open("evolutions.yaml", "w") as f1:
-    f1.write(yaml.dump(evos, default_flow_style=False, allow_unicode=True))
+    f1.write(yaml.dump(evols, default_flow_style=False, allow_unicode=True))
 
 move_desc = None
 with open("effecttypes.yml") as f1:
