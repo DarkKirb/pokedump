@@ -9,6 +9,7 @@ foldertbl = {
     b'\x9d\x0a':"blue",
     b'\x91\xe6':"red",
     b'\xdd\xd5':"green-j",
+    b'\xa2\xc1':"red-j",
     b'\x3c\xa2':"blue-d",
     b'\x5c\xdc':"red-d"
              }
