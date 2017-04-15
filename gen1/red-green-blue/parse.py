@@ -178,7 +178,7 @@ def get_pokedex_entry(id):
     feet, inch, pounds, meters, kilograms = None, None, None, None, None
     if imperial:
         feet, inch, pounds = struct.unpack("<BBH", f.read(4))
-        pounds /= 10
+        pounds /= 100
     else:
         meters, kilograms = struct.unpack("<BB", f.read(2))
         meters /= 10
