@@ -12,7 +12,9 @@ foldertbl = {
     b'\xdd\xd5': "green-j",
     b'\xa2\xc1': "red-j",
     b'\x3c\xa2': "blue-d",
-    b'\x5c\xdc': "red-d"
+    b'\x5c\xdc': "red-d",
+    b'V\xa4':    "blue-f",
+    b'z\xfc':    "red-f"
 }
 os.chdir(foldertbl[f.read(2)])
 with open("config.py", "r") as f2:
@@ -182,7 +184,7 @@ def get_pokedex_entry(id):
 
 
 entries = []
-for i in range(0 if includeGlitch else 1, 256 if includeGlitch else 190):
+for i in range(0, 256 if includeGlitch else 190):
     entries.append(get_pokedex_entry(i))
 print("Writing pokédex entries")
 with open("pokedex_ent.yaml", "w") as f1:
