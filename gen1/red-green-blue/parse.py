@@ -27,7 +27,7 @@ for i in range(0 if includeGlitch else 1, 256 if includeGlitch else no_pokemon):
     indexToDex.append(int.from_bytes(f.read(1), 'little'))
 print("Writing internal id -> pokédex number mapping")
 with open("index_to_dex.yaml","w") as f1:
-    f1.write(yaml.dump(indexToDex,default_flow_style=False))
+    f1.write(yaml.dump(indexToDex,default_flow_style=False,allow_unicode=True))
 
 basestats=[]
 def seek_to_stat(id):
@@ -58,7 +58,7 @@ for i in sorted(list(set(indexToDex))):
     do_stats(i)
 print("Writing pokémon base stats")
 with open("basestats.yaml","w") as f1:
-    f1.write(yaml.dump(basestats,default_flow_style=False))
+    f1.write(yaml.dump(basestats,default_flow_style=False,allow_unicode=True))
 
 def txt_to_str(bts):
     tbl = yaml.load(open("charset.yml","r").read())
@@ -106,7 +106,7 @@ for t in types:
     typenames[t]=get_type_name(t)
 print("Writing typenames")
 with open("typenames.yaml","w") as f1:
-    f1.write(yaml.dump(typenames,default_flow_style=False))
+    f1.write(yaml.dump(typenames,default_flow_style=False,allow_unicode=True))
 
 def get_pokemon_name(id):
     f.seek(pkmn_nametbl+id*monnames_len)
@@ -117,7 +117,7 @@ for i in range(256 if includeGlitch else 190):
     names.append(get_pokemon_name(i))
 print("Writing pokémon names")
 with open("monnames.yaml","w") as f1:
-    f1.write(yaml.dump(names,default_flow_style=False))
+    f1.write(yaml.dump(names,default_flow_style=False,allow_unicode=True))
 
 def get_pokedex_entry(id):
     f.seek(pkdex_tbl+id*2)
@@ -140,7 +140,7 @@ for i in range(0 if includeGlitch else 1, 256 if includeGlitch else 190):
     entries.append(get_pokedex_entry(i))
 print("Writing pokédex entries")
 with open("pokedex_ent.yaml", "w") as f1:
-    f1.write(yaml.dump(entries,default_flow_style=False))
+    f1.write(yaml.dump(entries,default_flow_style=False,allow_unicode=True))
 def get_encounters(id):
     f.seek(encounters_tbl+id*2)
     off=int.from_bytes(f.read(2),'little')
@@ -166,7 +166,7 @@ for i in range(248):
 
 print("writing encounters")
 with open("encounters.yaml","w") as f1:
-    f1.write(yaml.dump(encounters, default_flow_style=False))
+    f1.write(yaml.dump(encounters, default_flow_style=False,allow_unicode=True))
 
 #Evos and moves
 def get_evos_and_moves(id):
@@ -206,9 +206,9 @@ for i in range(256 if includeGlitch else 190):
     evos.append(x["evos"])
 print("Writing movesets and evos")
 with open("movesets.yaml","w") as f1:
-    f1.write(yaml.dump(movesets, default_flow_style=False))
+    f1.write(yaml.dump(movesets, default_flow_style=False,allow_unicode=True))
 with open("evolutions.yaml","w") as f1:
-    f1.write(yaml.dump(evos, default_flow_style=False))
+    f1.write(yaml.dump(evos, default_flow_style=False,allow_unicode=True))
 
 move_desc=None
 with open("effecttypes.yml") as f1:
@@ -221,7 +221,7 @@ for i in range(165):
 
 print("Writing move data")
 with open("moves.yaml","w") as f1:
-    f1.write(yaml.dump(moves, default_flow_style=False))
+    f1.write(yaml.dump(moves, default_flow_style=False,allow_unicode=True))
 
 movenames=[]
 f.seek(move_nametbl)
@@ -230,5 +230,5 @@ for i in range(165):
 
 print("Writing move names")
 with open("movenames.yaml","w") as f1:
-    f1.write(yaml.dump(movenames, default_flow_style=False))
+    f1.write(yaml.dump(movenames, default_flow_style=False,allow_unicode=True))
 
