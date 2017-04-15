@@ -1,0 +1,17 @@
+id_to_pokedex=0x42784
+no_pokemon=190
+mew_stat=0x425B
+other_stat=0x383DE
+type_nametbl=0x27DB1
+type_nametblbank=0x20000
+pkmn_nametbl=0x39446
+monnames_len=5
+pkdex_tbl=0x4045B
+pkdex_tblbank=0x40000
+encounters_tbl=0xCF61
+encounters_tblbank=0x8000
+evos_tbl=0x3B427
+evos_tblbank=0x38000
+move_tbl=0x38000
+move_nametbl=0x10000
+imperial=False
