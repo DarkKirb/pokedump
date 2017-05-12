@@ -10,9 +10,12 @@ foldertbl = {
     b'\x9d\x0a': "blue",
     b'\x91\xe6': "red",
     b'\xdd\xd5': "green-j",
+    b'\xf5G':    "green-j", #Rev A
     b'\xa2\xc1': "red-j",
+    b'\xb8f':    "red-j", #Rev A
     b'\xdc6':    "blue-j",
-    b'\x3c\xa2': "blue-d",
+    b'\x3c\xa2': "blue-d", #I don't know where I got this version from
+    b'.\xbc':    "blue-d",
     b'\x5c\xdc': "red-d",
     b'V\xa4':    "blue-f",
     b'z\xfc':    "red-f",
